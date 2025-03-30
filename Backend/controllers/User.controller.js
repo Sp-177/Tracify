@@ -3,7 +3,6 @@ import { asyncHandler } from "../utils/asynchandler.js";
 import { errorhandler } from "../utils/errorHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
 
 const registerUser = asyncHandler(async (req, res) => {
     const { name, email, age, password, role, familyHead } = req.body;
@@ -19,18 +18,23 @@ const registerUser = asyncHandler(async (req, res) => {
     if (role === "individual") {
         req.body.familyHead = undefined;
     }
-
+    const options = {
+        httpOnly: true,
+        secure: true, // Only secure in production
+        sameSite: "None", // Required for cross-origin cookies
+    };
     const existingUser = await User.findOne({ email });
     if (existingUser) {
         return res.status(400).json(new errorhandler(400, "User already exists"));
     }
-
     const user = await User.create(req.body);
-    return res.status(201).json(new ApiResponse(201, user, "User registered successfully"));
+    const accessToken = user.generateAccessToken();
+    const refreshToken = user.generateRefreshToken();
+    user.refreshToken = refreshToken;
+    return res.status(201).cookie("accessToken", accessToken , options).cookie("refreshToken", refreshToken , options).json(new ApiResponse(201,{accessToken, refreshToken, user}, "User registered successfully"));
 });
 
 const loginUser = asyncHandler(async (req, res) => {
-    console.log("Hi there !!");
     const { email, password } = req.body;
 
     if (!email || !password) {
@@ -41,13 +45,17 @@ const loginUser = asyncHandler(async (req, res) => {
     if (!user || !(await user.isPasswordCorrect(password))) {
         return res.status(401).json(new errorhandler(401, "Invalid credentials"));
     }
-
+    const options = {
+        httpOnly: true,
+        secure: true,
+        sameSite: "None",
+    };
     const accessToken = user.generateAccessToken();
     const refreshToken = user.generateRefreshToken();
     user.refreshToken = refreshToken;
     await user.save();
 
-    return res.status(200).cookie("accessToken", accessToken).cookie("refreshToken", refreshToken).json(new ApiResponse(200, { accessToken, refreshToken, user }, "User logged in successfully"));
+    return res.status(200).cookie("accessToken", accessToken , options).cookie("refreshToken", refreshToken , options).json(new ApiResponse(200, { accessToken, refreshToken, user }, "User logged in successfully"));
 });
 
 const logoutUser = asyncHandler(async (req, res) => {

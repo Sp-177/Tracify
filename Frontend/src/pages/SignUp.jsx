@@ -42,7 +42,8 @@ function SignUp() {
     e.preventDefault();
     if (validateForm()) {
       try {
-        const response = await axios.post('http://localhost:3001/api/v1/users/register', formData);
+        const response = await axios.post('http://localhost:3001/api/v1/users/register', formData , { withCredentials : true});
+        console.log(response);
         storeTokenInLS(response.data.data.accessToken);
       } catch (error) {
         console.error('Error submitting form:', error.response ? error.response.data : error.message);
