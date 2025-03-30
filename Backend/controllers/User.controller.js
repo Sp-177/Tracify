@@ -85,7 +85,7 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
     if (!user || !(await user.isPasswordCorrect(oldPassword))) {
         return res.status(400).json(new errorhandler(400, "Invalid old password"));
     }
-    user.password = await bcrypt.hash(newPassword, 10);
+    user.password = newPassword;
     await user.save({ validateBeforeSave: false });
     return res.status(200).json(new ApiResponse(200, {}, "Password changed successfully"));
 });
