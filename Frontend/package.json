@@ -18,7 +18,10 @@
     "ola-map-sdk": "^1.1.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-hot-toast": "^2.5.2",
     "react-map-gl": "^8.0.1",
+    "react-router-dom": "^7.4.1",
+    "rollup": "^4.38.0",
     "socket.io-client": "^4.8.1",
     "tailwindcss": "^4.0.15"
   },
