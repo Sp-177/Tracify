@@ -13,7 +13,7 @@ app.use(express.urlencoded({ limit: "10mb", extended: true }));
 // Middleware setup
 app.use(cors({
     origin: function (origin, callback) {
-        const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174'];
+        const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174' , '*'];
         if (!origin || allowedOrigins.includes(origin)) {
             callback(null, origin); // Allow the request
         } else {
