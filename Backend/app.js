@@ -31,10 +31,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 // // Routes
-// import authroutes from "./routes/auth.Routes.js"
-// import productroutes from "./routes/Product.Routes.js"
+import userroutes from "./routes/user.routes.js"
 // import orderroutes from "./routes/order.Routes.js"
-// app.use("/api/v1/users", authroutes);
+app.use("/api/v1/users", userroutes);
 // app.use("/api/v1/products", productroutes);
 // app.use("/api/v1/orders", orderroutes);
 

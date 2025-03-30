@@ -1,9 +1,10 @@
 import React from 'react'
+import Map from './Map_Files/Map';
 
 function App() {
   return (
-    <div>Guys Lets Crack it !@</div>
+    <Map/>
   )
 }
 
-export default App;
+export default App; 
