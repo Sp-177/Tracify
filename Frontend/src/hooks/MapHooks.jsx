@@ -9,7 +9,7 @@ const useStyleURL = (STYLE_NAME) => {
   useEffect(() => {
     const fetchStyleURL = async () => {
       try {
-        const url = `https://tiles.openfreemap.org/styles/liberty`;
+        const url = `https://tiles.openfreemap.org/styles/${STYLE_NAME}`;
         setStyleURL(url);
       } catch (error) {
         console.error('Error fetching style URL:', error);
@@ -33,7 +33,7 @@ const useMap =  (mapContainer, styleURL, transformRequest) => {
       style: styleURL,
       center: [0, 0],
       zoom: 7,
-      transformRequest: transformRequest || ((url) => ({ url })), // Ensure it's not undefined
+      transformRequest: transformRequest || ((url) => ({ url })),
     });
 
     setMap(newMap);

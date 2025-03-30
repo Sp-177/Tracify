@@ -10,28 +10,55 @@ dotenv.config({ path: "./.env" });
 const server = createServer(app);
 
 // Initialize Socket.io
-const io = new Server(server, { 
+const io = new Server(server, {
     cors: {
-        origin: ['http://localhost:5173', 'http://localhost:5174'],
-        methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD'],
-        credentials: true
+      origin: "*",
+      methods: ["GET", "POST"]
     }
-});
-
-// WebSocket Connection Handling
-io.on("connection", (socket) => {
-    console.log(`⚡ User connected: ${socket.id}`);
-
-    socket.on("sendMessage", (data) => {
-        console.log("📩 Message received:", data);
-        io.emit("receiveMessage", data); // Broadcast message to all clients
+  });
+  
+  let families = {}; // Store family-based user locations
+  
+  io.on("connection", (socket) => {
+    console.log("New client connected:", socket.id);
+  
+    // User joins a family room
+    socket.on("joinFamily", ({ userId, familyId }) => {
+      socket.join(familyId);
+      console.log(`${userId} joined family ${familyId}`);
+  
+      // Ensure family exists
+      if (!families[familyId]) {
+        families[familyId] = {};
+      }
+  
+      families[familyId][userId] = { latitude: null, longitude: null };
     });
-
+  
+    // Receive and broadcast location updates within the family
+    socket.on("updateLocation", ({ userId, familyId, latitude, longitude }) => {
+      if (families[familyId]) {
+        families[familyId][userId] = { latitude, longitude };
+  
+        console.log(`Location updated for ${userId} in Family ${familyId}: (${latitude}, ${longitude})`);
+  
+        // Send updates only to this family
+        io.to(familyId).emit("usersData", families[familyId]);
+      }
+    });
+  
     socket.on("disconnect", () => {
-        console.log(`❌ User disconnected: ${socket.id}`);
+      console.log("Client disconnected:", socket.id);
+      // Remove user from families (optional)
+      Object.keys(families).forEach((familyId) => {
+        Object.keys(families[familyId]).forEach((userId) => {
+          if (families[familyId][userId].socketId === socket.id) {
+            delete families[familyId][userId];
+          }
+        });
+      });
     });
-});
-
+  });
 // Connect to Database & Start Server
 ConnectDB()
     .then(() => {
