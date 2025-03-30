@@ -2,19 +2,23 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { Navigate } from 'react-router-dom';
+
 function SignUp() {
   const { isLoggedIn , storeTokenInLS}  = useAuth();
   if(isLoggedIn){
-    return <Navigate to={"/"} />
+    return <Navigate to={'/'} />;
   }
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     age: '',
     password: '',
     role: '',
+    headEmail: '',
     termsAccepted: false,
   });
+
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
@@ -32,6 +36,7 @@ function SignUp() {
     if (!formData.age) newErrors.age = 'Age is required';
     if (!formData.password) newErrors.password = 'Password is required';
     if (!formData.role) newErrors.role = 'Please select a role';
+    if (formData.role === 'family member' && !formData.headEmail) newErrors.headEmail = 'Head Email is required';
     if (!formData.termsAccepted) newErrors.termsAccepted = 'You must accept the terms & policy';
     
     setErrors(newErrors);
@@ -41,18 +46,24 @@ function SignUp() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      try {
-        const response = await axios.post('http://localhost:3001/api/v1/users/register', formData , { withCredentials : true});
-        console.log(response);
-        storeTokenInLS(response.data.data.accessToken);
-      } catch (error) {
-        console.error('Error submitting form:', error.response ? error.response.data : error.message);
-      }
+        try {
+            const requestData = { ...formData };
+            if (requestData.role === "family member") {
+                requestData.familyHead = requestData.headEmail; // NEW: Ensure correct field is sent
+            } else {
+                delete requestData.familyHead;
+            }
+
+            const response = await axios.post('http://localhost:3001/api/v1/users/register', requestData, { withCredentials: true });
+            storeTokenInLS(response.data.data.accessToken);
+        } catch (error) {
+            console.error('Error submitting form:', error.response ? error.response.data : error.message);
+        }
     }
-  };
+};
 
   return (
-    <div className="flex h-screen w-full">
+    <div className="flex h-auto min-h-screen w-full">
       {/* Left Side - Form */}
       <div className="w-1/2 flex items-center justify-center bg-white p-10 mt-4">
         <div className="max-w-md w-full">
@@ -83,12 +94,6 @@ function SignUp() {
               {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
             </div>
             
-            <div className="mb-4 flex items-center">
-              <input type="checkbox" name="termsAccepted" className="mr-2" checked={formData.termsAccepted} onChange={handleChange} />
-              <span className="text-sm text-gray-600">I agree to the <a href="#" className="text-blue-600">terms & policy</a></span>
-            </div>
-            {errors.termsAccepted && <p className="text-red-500 text-sm">{errors.termsAccepted}</p>}
-            
             <div className="mb-4">
               <label className="block text-gray-700 mb-1">Sign up as</label>
               <select name="role" className="w-full p-2 border rounded-lg" value={formData.role} onChange={handleChange}>
@@ -99,6 +104,20 @@ function SignUp() {
               </select>
               {errors.role && <p className="text-red-500 text-sm">{errors.role}</p>}
             </div>
+
+            {formData.role === 'family member' && (
+              <div className="mb-4">
+                <label className="block text-gray-700 mb-1">Head Email</label>
+                <input type="email" name="headEmail" className="w-full p-2 border rounded-lg" placeholder="Enter head's email" value={formData.headEmail} onChange={handleChange} />
+                {errors.headEmail && <p className="text-red-500 text-sm">{errors.headEmail}</p>}
+              </div>
+            )}
+            
+            <div className="mb-4 flex items-center">
+              <input type="checkbox" name="termsAccepted" className="mr-2" checked={formData.termsAccepted} onChange={handleChange} />
+              <span className="text-sm text-gray-600">I agree to the <a href="#" className="text-blue-600">terms & policy</a></span>
+            </div>
+            {errors.termsAccepted && <p className="text-red-500 text-sm">{errors.termsAccepted}</p>}
             
             <button type="submit" className="w-full bg-green-700 text-white py-2 rounded-lg hover:bg-green-800">Signup</button>
           </form>

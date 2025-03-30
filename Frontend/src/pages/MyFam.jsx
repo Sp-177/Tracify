@@ -1,9 +1,11 @@
 import React from 'react'
 import { useAuth } from '../context/AuthContext'
+import axios from "axios"
 
-function MyFam() {
-    const {user} = useAuth();
-    
+
+
+function MyFam({userId}) {
+  
   return (
          <div className='flex flex-col items-center p-4 relative'>
       <button 
