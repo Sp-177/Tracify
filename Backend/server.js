@@ -12,6 +12,7 @@ ConnectDB()
         console.log(`Server is running at: http://localhost:${port}`)
     })
 })
+// HI 
 .catch((error)=>{
     console.log(error);
 })
