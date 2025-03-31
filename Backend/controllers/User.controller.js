@@ -3,7 +3,6 @@ import { asyncHandler } from "../utils/asynchandler.js";
 import { errorhandler } from "../utils/errorHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
 
 /**
  * Register User
@@ -20,11 +19,11 @@ const registerUser = asyncHandler(async (req, res) => {
         // Assign family head's own _id as familyId
         familyId = null; // Initially null, will be updated after user creation
     } else if (role === "family member") {
-        if (!familyHeadEmail) {
+        if (!headEmail) {
             return res.status(400).json(new errorhandler(400, "Family member must provide a family head email"));
         }
 
-        const familyHead = await User.findOne({ email: familyHeadEmail });
+        const familyHead = await User.findOne({ email: headEmail });
         if (!familyHead || familyHead.role !== "family head") {
             return res.status(400).json(new errorhandler(400, "Invalid family head email"));
         }

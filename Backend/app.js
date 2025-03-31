@@ -11,10 +11,11 @@ app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
 // Middleware setup
+// const allowedOrigins = ['*']
+
 const allowedOrigins = [
     'http://localhost:5173',
-    'http://localhost:5174',
-    'https://j0nn94s7-5173.inc1.devtunnels.ms'
+    'http://localhost:5174'
 ];
 
 app.use(cors({

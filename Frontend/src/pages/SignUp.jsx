@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { Navigate } from 'react-router-dom';
+import { Backendurl } from '../../Private/backend';
 
 function SignUp() {
   const { isLoggedIn , storeTokenInLS}  = useAuth();
@@ -54,11 +55,7 @@ function SignUp() {
                 delete requestData.familyHeadEmail;
             }
 
-            const response = await axios.post(
-                'http://localhost:3001/api/v1/users/register',
-                requestData,
-                { withCredentials: true }
-            );
+            const response = await axios.post(`${Backendurl}/api/v1/users/register`, requestData, { withCredentials: true });
             storeTokenInLS(response.data.data.accessToken);
         } catch (error) {
             console.error('Error submitting form:', error.response ? error.response.data : error.message);

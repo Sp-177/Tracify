@@ -1,27 +1,11 @@
-import React, { useState } from "react";
-import { useAuth } from "../context/AuthContext";
-import axios from "axios";
-import FamCard from "../Components/FamCard";
-function MyFam({ userId }) {
-  const [familyMembers, setFamilyMembers] = useState([]);
-  const { user } = useAuth();
+import React from 'react'
+import { useAuth } from '../context/AuthContext'
+import axios from "axios"
 
-  const handleFetchFamily = async () => {
-    try {
-      const response = await axios.get(
-        `/api/v1/users/getfamily/${user.familyId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        }
-      );
-      setFamilyMembers(response.data.familyMembers);
-    } catch (error) {
-      console.error("Error fetching family members", error);
-    }
-  };
 
+
+function MyFam() {
+  
   return (
     <div className="flex flex-col items-center p-4 relative">
       <button
