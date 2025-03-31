@@ -13,6 +13,7 @@
     "@maplibre/maplibre-gl-directions": "^0.8.0",
     "@tailwindcss/vite": "^4.0.16",
     "@turf/turf": "^7.2.0",
+    "esbuild": "^0.25.2",
     "firebase": "^11.5.0",
     "maplibre-gl": "^5.2.0",
     "ola-map-sdk": "^1.1.5",
