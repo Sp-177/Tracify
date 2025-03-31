@@ -10,7 +10,6 @@ import bcrypt from "bcryptjs";
  */
 const registerUser = asyncHandler(async (req, res) => {
     const { name, email, age, password, role, familyHeadEmail } = req.body;
-
     if (!name || !email || !age || !password || !role) {
         return res.status(400).json(new errorhandler(400, "All fields are required"));
     }
@@ -30,7 +29,7 @@ const registerUser = asyncHandler(async (req, res) => {
             return res.status(400).json(new errorhandler(400, "Invalid family head email"));
         }
 
-        familyId = familyHead._id; // Assign family head's _id as familyId
+        familyId = familyHead._id; 
     }
 
     const existingUser = await User.findOne({ email });

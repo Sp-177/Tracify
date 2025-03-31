@@ -49,12 +49,16 @@ function SignUp() {
         try {
             const requestData = { ...formData };
             if (requestData.role === "family member") {
-                requestData.familyHead = requestData.headEmail; // NEW: Ensure correct field is sent
+                requestData.familyHeadEmail = requestData.headEmail;
             } else {
-                delete requestData.familyHead;
+                delete requestData.familyHeadEmail;
             }
 
-            const response = await axios.post('http://localhost:3001/api/v1/users/register', requestData, { withCredentials: true });
+            const response = await axios.post(
+                'http://localhost:3001/api/v1/users/register',
+                requestData,
+                { withCredentials: true }
+            );
             storeTokenInLS(response.data.data.accessToken);
         } catch (error) {
             console.error('Error submitting form:', error.response ? error.response.data : error.message);
