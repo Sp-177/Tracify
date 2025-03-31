@@ -11,18 +11,26 @@ app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
 // Middleware setup
+// const allowedOrigins = ['*']
+
+const allowedOrigins = [
+    'http://localhost:5173',
+    'http://localhost:5174'
+];
+
 app.use(cors({
     origin: function (origin, callback) {
-        const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174' , '*'];
         if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, origin); // Allow the request
+            callback(null, true); // Allow the request
         } else {
-            callback(new Error('Not allowed by CORS'));
+            console.warn(`Blocked CORS request from: ${origin}`);
+            callback(new Error('CORS policy does not allow this origin.'));
         }
     },
-    methods: "GET, POST, PUT, DELETE, PATCH, HEAD",
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD'],
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
+    optionsSuccessStatus: 204 // Ensures proper handling of preflight requests
 }));
 
 app.use(cookieParser());
@@ -32,9 +40,8 @@ app.use(express.static("public"));
 
 // // Routes
 import userroutes from "./routes/user.routes.js"
-// import orderroutes from "./routes/order.Routes.js"
+
 app.use("/api/v1/users", userroutes);
-// app.use("/api/v1/products", productroutes);
-// app.use("/api/v1/orders", orderroutes);
+
 
 export { app, port };

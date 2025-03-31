@@ -1,71 +1,85 @@
-import { useState, useEffect, useRef } from 'react';
-import {Map as MapLibreMap ,  NavigationControl, GeolocateControl, Marker, Popup } from 'maplibre-gl';
+import { useState, useEffect, useRef ,useMemo } from 'react';
+import {Map as MapLibreMap ,  NavigationControl, GeolocateControl, Marker, Popup , LngLatBounds } 
+from 'maplibre-gl';
 import * as turf from '@turf/turf';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
-const useStyleURL = (STYLE_NAME) => {
-  const [styleURL, setStyleURL] = useState(null);
-  
-  useEffect(() => {
-    const fetchStyleURL = async () => {
-      try {
-        const url = `https://tiles.openfreemap.org/styles/${STYLE_NAME}`;
-        setStyleURL(url);
-      } catch (error) {
-        console.error('Error fetching style URL:', error);
-      }
-    };
-    
-    fetchStyleURL();
-  }, [STYLE_NAME]);
-  
-  return styleURL;
-};
-
-const useMap =  (mapContainer, styleURL, transformRequest) => {
+const useMap = (mapContainer) => {
   const [map, setMap] = useState(null);
 
   useEffect(() => {
-    if (map || !styleURL || !mapContainer?.current) return;
+    if (map || !mapContainer?.current) return;
 
-    const newMap =  new MapLibreMap({
+    const newMap = new MapLibreMap({
       container: mapContainer.current,
-      style: styleURL,
-      center: [0, 0],
-      zoom: 7,
-      transformRequest: transformRequest || ((url) => ({ url })),
+      style: {
+        version: 8,
+        sources: {
+          osm: {
+            type: "raster",
+            tiles: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
+            tileSize: 256,
+            attribution: "&copy; OpenStreetMap contributors",
+          },
+        },
+        layers: [
+          {
+            id: "osm-layer",
+            type: "raster",
+            source: "osm",
+            minzoom: 0,
+            maxzoom: 19,
+          },
+        ],
+      },
+      center: [78.9629, 22.5937], // Center on India
+      zoom: 4,
+      minZoom: 2, // Prevent excessive zooming out
+      maxZoom: 18, // Prevent white screen issue
+      maxBounds: [
+        [60, 5], // Southwest bounds (approximate India coverage)
+        [100, 40], // Northeast bounds
+      ],
+    });
+
+    // Enforce zoom limits
+    newMap.on("zoomend", () => {
+      if (newMap.getZoom() > 18) {
+        newMap.setZoom(18);
+      }
+      if (newMap.getZoom() < 1) {
+        newMap.setZoom(1);
+      }
     });
 
     setMap(newMap);
-    return () => newMap.remove();
-  }, [styleURL, transformRequest]);
-  console.log("Map Url Generated");
-  return map;
+
+    return () => {
+      newMap.off("zoomend"); // Cleanup event listener
+      newMap.remove(); // Destroy map instance
+    };
+  }, []);
+
+  return useMemo(() => map, [map]);
 };
 
 
 const useGeolocateControl = (map) => {
   useEffect(() => {
     if (!map) return;
-    
     const geolocate = new GeolocateControl({
       positionOptions: {
-        enableHighAccuracy: true,
+        enableHighAccuracy: true, 
       },
       trackUserLocation: true,
       showAccuracyCircle: true,
     });
     map.addControl(geolocate);
-    console.log(geolocate);
     
     map.on("load", () => {
       geolocate.trigger();
-      geolocate.on("error", () => {
-        console.log("An error event has occurred.");
-      });
     });
   }, [map]);
-  console.log("user geoLocation Generated");
   return true;
 };
 
@@ -76,40 +90,70 @@ const useNavigationControl = (map) => {
   }, [map]);
   return 1;
 };
-const useGenerateUserMarker = (map, color, userData) => {
+
+const useGenerateUserMarker = (map, color, usersData, userFamily) => {
   useEffect(() => {
-    if (!map || !userData) return;
-    
-    const popup = new Popup({ closeButton: false, closeOnClick: false })
-      .setHTML(
-        `<div class="p-2 text-sm bg-white shadow-lg rounded-lg">
-          <strong class="text-lg text-gray-900">${userData.reportedby}</strong><br/>
-          <span class="text-gray-700">${userData.Contact_details}</span><br/>
-          <span class="text-gray-500">Location: (${userData.latitude}, ${userData.longitude})</span>
-        </div>`
-      );
-    const marker = new Marker({ color : color })
-      .setLngLat([userData.longitude, userData.latitude])
-      .addTo(map);
-      
-    
-    map.flyTo({ center: [userData.longitude, userData.latitude], zoom: 14 });
-    marker.getElement().addEventListener("mouseenter", () => {
-      popup.setLngLat([userData.longitude, userData.latitude]).addTo(map);
+    if (!map || !usersData || !userFamily) {
+      console.error("Please Upload all userData || userFamily error at useGenerateUserMarker");
+      return;
+    }
+
+    const commonMembers = usersData.filter(user =>
+      userFamily.some(member => member._id === user.userId)
+    );
+
+    const markers = [];
+    const bounds = new LngLatBounds();
+
+    commonMembers.forEach((userData) => {
+      const familyMember = userFamily.find(member => member._id === userData.userId);
+      if (!familyMember) return;
+
+      console.log("Family member are", familyMember);
+
+      const popup = new Popup({ closeButton: false, closeOnClick: false })
+        .setHTML(
+          `<div class="p-2 text-sm bg-white shadow-lg rounded-lg">
+            <img src="${familyMember.avatar || 'default-avatar.png'}" alt="Avatar" class="w-12 h-12 rounded-full mb-2" />
+            <strong class="text-lg text-gray-900">${familyMember.name}</strong><br/>
+            <span class="text-gray-600">${familyMember.role}</span><br/>
+            <span class="text-gray-600">Age: ${familyMember.age}</span><br/>
+            <span class="text-gray-500">Location: (${userData.latitude}, ${userData.longitude})</span>
+          </div>`
+        );
+
+      const marker = new Marker({ color })
+        .setLngLat([userData.longitude, userData.latitude])
+        .addTo(map);
+
+      marker.getElement().addEventListener("mouseover", () => {
+        marker.setPopup(popup).togglePopup();
+      });
+
+      marker.getElement().addEventListener("mouseout", () => {
+        marker.getPopup().remove();
+      });
+
+      bounds.extend([userData.longitude, userData.latitude]);
+      markers.push(marker);
     });
 
-    marker.getElement().addEventListener("mouseleave", () => {
-      popup.remove();
-    });
-    
+    // Adjust the map to fit all markers
+    if (commonMembers.length > 0) {
+      map.fitBounds(bounds, { padding: 50, maxZoom: 15, duration: 1000 });
+    }
+
+    console.log("Bounds:", bounds);
+
     return () => {
-      marker.remove();
-      popup.remove();
+      markers.forEach(marker => marker.remove());
     };
-  }, [map, color, userData]);
-  console.log("User Generated User Marker");
-  return 1;
+  }, [map, usersData, userFamily]);
 };
+
+
+
+
 const useMapCircle = (map, centerCoordinates, radiusKm) => {
   useEffect(() => {
     if (!map || !centerCoordinates) return;
@@ -164,4 +208,4 @@ const useMapCircle = (map, centerCoordinates, radiusKm) => {
   return true;
 };
 
-export { useStyleURL, useMap, useGeolocateControl, useNavigationControl , useGenerateUserMarker,useMapCircle};
+export { useMap, useGeolocateControl, useNavigationControl , useGenerateUserMarker,useMapCircle};

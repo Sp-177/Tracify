@@ -5,44 +5,25 @@ import jwt from "jsonwebtoken";
 
 const userSchema = new mongoose.Schema(
     {
-        name: {
-            type: String,
-            required: true,
+        name: { type: String, required: true },
+        email: { type: String, required: true, unique: true },
+        age: { type: Number, required: true },
+        password: { type: String, required: true },
+        avatar: { type: String },
+        role: { type: String, enum: ["family head", "family member", "individual"], required: true },
+
+        familyId: { 
+            type: mongoose.Schema.Types.ObjectId, 
+            ref: "User",
+            required: function () { return this.role === "family member"; } 
         },
-        email: {
-            type: String,
-            required: true,
-            unique: true,
-        },
-        age: {
-            type: Number,
-            required: true,
-        },
-        password: {
-            type: String,
-            required: true,
-        },
-        avatar: {
-            type: String,
-            required: false,
-        },
-        role: {
-            type: String,
-            enum: ["family head", "family member", "individual"],
-            required: true,
-        },
-        familyHead: {
-            type: String, // Storing email instead of ObjectId
-            required: function () {
-                return this.role === "family member";
-            },
-        },
-        refreshToken: {
-            type: String,
-        },
+
+        refreshToken: { type: String },
+        image_url: { type: String }
     },
     { timestamps: true }
 );
+
 
 userSchema.pre("save", async function (next) {
     if (!this.isModified("password")) return next();
