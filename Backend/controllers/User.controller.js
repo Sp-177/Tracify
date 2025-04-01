@@ -9,7 +9,7 @@ import { uploadOnCloudinary } from "../utils/cloudinary.js";
  * Register User
  */
 const registerUser = asyncHandler(async (req, res) => {
-    const { name, email, age, password, role, familyHeadEmail } = req.body;
+    const { name, email, age, password, role, headEmail , avatar} = req.body;
     if (!name || !email || !age || !password || !role) {
         return res.status(400).json(new errorhandler(400, "All fields are required"));
     }
@@ -43,7 +43,8 @@ const registerUser = asyncHandler(async (req, res) => {
         age,
         password,
         role,
-        familyId, // Will be null for family head initially
+        avatar : avatar,
+        familyId
     });
 
     // If user is a family head, update their familyId to their own _id
@@ -142,7 +143,7 @@ const fetchFamily = asyncHandler(async (req, res) => {
     // console.log(familyId);
     // Fetch all family members (excluding the family head)
     const familyMembers = await User.find({ familyId : familyId }).select("-password -refreshToken");
-
+    console.log(familyMembers);
     if (!familyMembers.length) {
         return res.status(404).json(new errorhandler(404, "No family members found"));
     }

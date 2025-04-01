@@ -17,6 +17,7 @@ function SignUp() {
     password: '',
     role: '',
     headEmail: '',
+    avatar: '',
     termsAccepted: false,
   });
 
@@ -49,6 +50,8 @@ function SignUp() {
     if (validateForm()) {
         try {
             const requestData = { ...formData };
+            requestData.avatar = `https://avatar.iran.liara.run/username?username=${requestData.name}`
+            console.log(requestData);
             if (requestData.role === "family member") {
                 requestData.familyHeadEmail = requestData.headEmail;
             } else {
