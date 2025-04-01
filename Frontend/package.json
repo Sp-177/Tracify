@@ -14,11 +14,13 @@
     "@react-three/drei": "^10.0.5",
     "@react-three/fiber": "^9.1.0",
     "@tailwindcss/vite": "^4.0.16",
+    "@tanstack/react-query": "^5.71.1",
     "@turf/turf": "^7.2.0",
     "esbuild": "^0.25.2",
     "firebase": "^11.5.0",
     "framer-motion": "^12.6.2",
     "gsap": "^3.12.7",
+    "lucide-react": "^0.486.0",
     "maplibre-gl": "^5.2.0",
     "ola-map-sdk": "^1.1.5",
     "react": "^19.0.0",
@@ -31,7 +33,8 @@
     "router-dom": "^3.0.3",
     "socket.io-client": "^4.8.1",
     "tailwindcss": "^4.0.15",
-    "three": "^0.175.0"
+    "three": "^0.175.0",
+    "wouter": "^3.6.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
