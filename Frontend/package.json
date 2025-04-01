@@ -12,18 +12,22 @@
   "dependencies": {
     "@maplibre/maplibre-gl-directions": "^0.8.0",
     "@tailwindcss/vite": "^4.0.16",
+    "@tanstack/react-query": "^5.71.1",
     "@turf/turf": "^7.2.0",
     "firebase": "^11.5.0",
+    "lucide-react": "^0.486.0",
     "maplibre-gl": "^5.2.0",
     "ola-map-sdk": "^1.1.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hot-toast": "^2.5.2",
+    "react-icons": "^5.5.0",
     "react-map-gl": "^8.0.1",
     "react-router-dom": "^7.4.1",
     "rollup": "^4.38.0",
     "socket.io-client": "^4.8.1",
-    "tailwindcss": "^4.0.15"
+    "tailwindcss": "^4.0.15",
+    "wouter": "^3.6.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
