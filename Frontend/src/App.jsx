@@ -6,6 +6,10 @@ import MyFam from "./pages/MyFam";
 import Mapfile from "./Map/Mapfile";
 import { useAuth } from "./context/AuthContext";
 
+import Home from "./pages/Home";
+import ContactPage from "./pages/ContactPage";
+import Mapfile from "./Map/Mapfile";
+import Profile from "./pages/Profile";
 const App = () => {
   const { user, loading } = useAuth();
 
@@ -24,6 +28,12 @@ const App = () => {
         ) : (
           <Route path="/maparea" element={<SignIn />} /> // Redirect to SignIn if user is not logged in
         )}
+        <Route path="/signin" element={<SignIn/>} />
+        <Route path="/signup" element={<SignUp/>} />
+        <Route path="/" element={<Home />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/map" element={<Mapfile />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </Router>
   );
