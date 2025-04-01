@@ -3,13 +3,13 @@ import { asyncHandler } from "../utils/asynchandler.js";
 import { errorhandler } from "../utils/errorHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
+import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
 /**
  * Register User
  */
 const registerUser = asyncHandler(async (req, res) => {
-    const { name, email, age, password, role, familyHeadEmail } = req.body;
+    const { name, email, age, password, role, headEmail } = req.body;
 
     if (!name || !email || !age || !password || !role) {
         return res.status(400).json(new errorhandler(400, "All fields are required"));
@@ -21,11 +21,11 @@ const registerUser = asyncHandler(async (req, res) => {
         // Assign family head's own _id as familyId
         familyId = null; // Initially null, will be updated after user creation
     } else if (role === "family member") {
-        if (!familyHeadEmail) {
+        if (!headEmail) {
             return res.status(400).json(new errorhandler(400, "Family member must provide a family head email"));
         }
 
-        const familyHead = await User.findOne({ email: familyHeadEmail });
+        const familyHead = await User.findOne({ email: headEmail });
         if (!familyHead || familyHead.role !== "family head") {
             return res.status(400).json(new errorhandler(400, "Invalid family head email"));
         }
@@ -169,13 +169,39 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
  * Update Account Details
  */
 const updateAccountDetails = asyncHandler(async (req, res) => {
-    const { name, email } = req.body;
-    if (!name || !email) {
-        return res.status(400).json(new errorhandler(400, "All fields are required"));
+    let updateFields = { ...req.body };
+
+    // Prevent updating restricted fields
+    delete updateFields.email;
+    delete updateFields.password;
+    delete updateFields.role;
+
+    // Handle Image Upload
+    if (req.files && req.files.UserImage) {
+        const User_Image_local_path = req.files.UserImage[0].path;
+
+        // Upload the image to Cloudinary and get only the URL
+        const avatarUrl = await uploadOnCloudinary(User_Image_local_path);
+        console.log("dekh ya hai ",avatarUrl);
+        updateFields.avatar = avatarUrl.url;
     }
-    const user = await User.findByIdAndUpdate(req.user._id, { $set: { name, email } }, { new: true }).select("-password");
+    if (Object.keys(updateFields).length === 0) {
+        return res.status(400).json(new errorhandler(400, "No changes detected"));
+    }
+
+    // Update the user details in the database
+    const user = await User.findByIdAndUpdate(
+        req.user._id,
+        { $set: updateFields },
+        { new: true }
+    ).select("-password");
+
     return res.status(200).json(new ApiResponse(200, user, "Account details updated successfully"));
 });
+
+
+
+
 
 export { 
     registerUser, 
