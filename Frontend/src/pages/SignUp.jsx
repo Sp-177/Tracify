@@ -17,6 +17,7 @@ function SignUp() {
     password: '',
     role: '',
     headEmail: '',
+    avatar: '',
     termsAccepted: false,
   });
 
@@ -49,10 +50,12 @@ function SignUp() {
     if (validateForm()) {
         try {
             const requestData = { ...formData };
+            requestData.avatar = `https://avatar.iran.liara.run/username?username=${requestData.name}`
+            console.log(requestData);
             if (requestData.role === "family member") {
-                requestData.familyHead = requestData.headEmail; // NEW: Ensure correct field is sent
+                requestData.familyHeadEmail = requestData.headEmail;
             } else {
-                delete requestData.familyHead;
+                delete requestData.familyHeadEmail;
             }
 
             const response = await axios.post(`${Backendurl}/api/v1/users/register`, requestData, { withCredentials: true });
