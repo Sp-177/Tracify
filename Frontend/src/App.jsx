@@ -8,6 +8,8 @@ import Home from "./pages/Home";
 import ContactPage from "./pages/ContactPage";
 import Profile from "./pages/Profile";
 import MyFam from "./pages/MyFam";
+import LoadingScreen from "./Components/LoadingScreen.jsx"; // Import loading screen
+import Lost from "./pages/Lost.jsx";
 import LoadingScreen from "./Components/LoadingScreen.jsx";
 import FlashLight404 from "./pages/FlashLight404.jsx"; // Import loading screen
 
@@ -36,6 +38,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/aboutus" element={<AboutUs />} />
         <Route path="/signin" element={<SignIn />} />
+        <Route path="/lost" element={<Lost/>}/>
         <Route path="/signup" element={<SignUp />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/profile" element={<Profile />} />
