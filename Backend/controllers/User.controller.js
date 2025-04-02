@@ -4,6 +4,9 @@ import { errorhandler } from "../utils/errorHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import fs from "fs";
+import axios from "axios";
+import FormData from "form-data";
 
 /**
  * Register User
@@ -198,9 +201,53 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
     return res.status(200).json(new ApiResponse(200, user, "Account details updated successfully"));
 });
 
+// const storage = multer.diskStorage({
+//     destination: "uploads/",
+//     filename: (req, file, cb) => {
+//         cb(null, Date.now() + "-" + file.originalname);
+//     }
+//   });
+//   const upload = multer({ storage });
+
+const uploadFile = asyncHandler(async (req, res) => {
+    // console.log("hii");
+    try {
+        if (!req.files  || !req.files.image) {
+            return res.status(400).json({ error: "No file uploaded" });
+        }
+        
+        const {userId} = req.body;
+        console.log("userId",userId);
+        const imagePath = req.files.image.path;
+        console.log("Image path is ",imagePath);
 
 
+        const formData = new FormData();
+        formData.append("image", fs.createReadStream(imagePath));
+        console.log(formData);
+        const response = await axios.post("http://127.0.0.1:5001/process", formData,{
+            headers: formData.getHeaders(),
+        });
+        
 
+        // console.log("🔵 API Response:", response.data);
+
+        if (response.data.match) {
+            if(userId){
+                await User.findByIdAndUpdate(userId, {$inc: {points:100}});
+            }
+            // console.log("✅ Match found with ID:", response.data.match_id);
+            return res.json({ match: true, match_id: response.data.match_id });
+        } else {
+            // console.log("❌ No match found");
+            return res.json({ match: false });
+        }
+
+    } catch (error) {
+        console.error("Upload error:", error.message);
+        res.status(500).json({ error: error.message });
+    }
+});
 
 export { 
     registerUser, 
@@ -210,5 +257,6 @@ export {
     refreshAccessToken, 
     changeCurrentPassword, 
     updateAccountDetails,
-    fetchFamily
+    fetchFamily,
+    uploadFile
 };
