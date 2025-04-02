@@ -193,7 +193,7 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
         req.user._id,
         { $set: updateFields },
         { new: true }
-    ).select("-password");
+    ).select("-password -refreshToken");
 
     return res.status(200).json(new ApiResponse(200, user, "Account details updated successfully"));
 });

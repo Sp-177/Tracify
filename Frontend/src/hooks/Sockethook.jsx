@@ -3,6 +3,7 @@ import { io } from "socket.io-client";
 import { Backendurl } from "../../Private/backend";
 
 const useSocket = (setUsersData, userId, familyId) => {
+  let interval;
   useEffect(() => {
     const socket = io(`${Backendurl}`);
 
@@ -32,7 +33,7 @@ const useSocket = (setUsersData, userId, familyId) => {
       }
     };
 
-    const interval = setInterval(sendLocationUpdate, 10000);
+    interval = setInterval(sendLocationUpdate, 10000);
 
     return () => {
       clearInterval(interval);
@@ -40,7 +41,7 @@ const useSocket = (setUsersData, userId, familyId) => {
     };
   }, [userId, familyId]);
 
-  return {};
+  return interval;
 };
 
 export { useSocket };

@@ -3,6 +3,7 @@ import FamCard from '../Components/FamCard';
 import { useAuth } from '../context/AuthContext';
 import { useGenerateUserMarker, useMap, useNavigationControl } from "../hooks/MapHooks";
 import { useSocket } from "../hooks/Sockethook";
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 function MyFam() {
   const { user, userFamily } = useAuth();
