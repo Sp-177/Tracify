@@ -75,7 +75,7 @@ export default function Navbar() {
                 <img className="size-9 rounded-full" src={user.avatar} alt="Profile" />
               </button>
               {isDropdownOpen && (
-                <div className="absolute right-0 z-10 mt-2 w-48 bg-white shadow-lg rounded-md py-1 ring-1 ring-black/5">
+                <div className="absolute right-0 z-10 mt-46 ml-12 w-48 bg-white shadow-lg rounded-md py-1 ring-1 ring-black/5">
                   <a href="/profile" className="block px-4 py-2 text-sm text-gray-700">
                     Your Profile
                   </a>

@@ -9,6 +9,7 @@ import ContactPage from "./pages/ContactPage";
 import Profile from "./pages/Profile";
 import MyFam from "./pages/MyFam";
 import LoadingScreen from "./Components/LoadingScreen.jsx"; // Import loading screen
+import Lost from "./pages/Lost.jsx";
 
 // Private Route Component
 const PrivateRoute = ({ element }) => {
