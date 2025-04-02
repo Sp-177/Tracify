@@ -76,17 +76,17 @@ def verify_details():
         aadhar_number = data.get("aadhar", "").strip()
         first_name = data.get("first", "").strip().lower()
         last_name = data.get("last", "").strip().lower()
-        date_of_birth = data.get("dob", "").strip()
+        # date_of_birth = data.get("dob", "").strip()
 
     # Validate required fields
-        if not (aadhar_number and first_name and last_name and date_of_birth):
+        if not (aadhar_number and first_name and last_name ):
             return jsonify({"success": False, "message": "All fields are required"}), 400
 
     # Fetch only required fields from MongoDB
 
         user_details = collection.find_one(
             {"aadhar": aadhar_number},
-            {"_id": 0, "first": 1, "last": 1, "dob": 1}
+            {"_id": 0, "first": 1, "last": 1}
         )
 
         if not user_details:
@@ -95,10 +95,10 @@ def verify_details():
     # Normalize stored data for comparison
         stored_first = user_details.get("first", "").strip().lower()
         stored_last = user_details.get("last", "").strip().lower()
-        stored_dob = str(user_details.get("dob", "")).strip()  # Ensure DOB is string for comparison
+        # stored_dob = str(user_details.get("dob", "")).strip()  # Ensure DOB is string for comparison
 
     # Validate credentials
-        if stored_first == first_name and stored_last == last_name and stored_dob == date_of_birth:
+        if stored_first == first_name and stored_last == last_name:
             return jsonify({"success": True}), 200
         else:
             return jsonify({"success": False, "message": "False Credentials"}), 200

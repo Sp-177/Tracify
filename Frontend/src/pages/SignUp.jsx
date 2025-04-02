@@ -69,18 +69,47 @@ function SignUp() {
     if (!formData.email) newErrors.email = 'Email is required';
     if (!formData.age) newErrors.age = 'Age is required';
     if (!formData.password) newErrors.password = 'Password is required';
-    if (!formData.role) newErrors.role = 'Please select a role';
-    if (formData.role === 'family member' && !formData.headEmail) newErrors.headEmail = 'Head Email is required';
-    if (!formData.termsAccepted) newErrors.termsAccepted = 'You must accept the terms & policy';
+    // if (!formData.role) newErrors.role = 'Please select a role';
+    // if (formData.role === 'family member' && !formData.headEmail) newErrors.headEmail = 'Head Email is required';
+    // if (!formData.termsAccepted) newErrors.termsAccepted = 'You must accept the terms & policy';
     if (!formData.aadharCardNo) newErrors.aadharCardNo = 'Aadhar Card Number is required';
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
+  const verifyForm = async () => {
+    
+    
+    // Split name and remove empty parts
+    const nameParts = formData.name.trim().split(' ').filter(Boolean);
+    
+    const details = {
+      first: nameParts[0] || "",  // First name
+      last: nameParts.at(-1) || "",  // Last name (handles single-word names)
+      aadhar: formData.aadharCardNo,
+    };
+  
+    // Validate inputs
+    if (Object.values(details).some((val) => !val)) {
+      alert("Fill all fields");
+      return false;
+    }
+  
+    try {
+      const response = await axios.post("http://127.0.0.1:5000/verify", details);
+      
+      return response.data.success || false;
+    } catch (error) {
+      console.error("Verification Error:", error);
+      setErrors("Verification Unsuccessful");
+      return false;
+    }
+  };
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
+    
+    if (validateForm()&&verifyForm()) {
       try {
         const requestData = { ...formData };
         requestData.avatar = requestData.avatar || `https://avatar.iran.liara.run/username?username=${requestData.name}`;

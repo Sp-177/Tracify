@@ -42,7 +42,7 @@ const ProfilePage = () => {
     setUploading(true);
     try {
       const response = await axios.patch(
-        ${Backendurl}/api/v1/users/update-account,
+        `${Backendurl}/api/v1/users/update-account`,
         formDataToSend,
         {
           headers: { "Content-Type": "multipart/form-data" },
