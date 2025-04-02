@@ -24,49 +24,60 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-white shadow-md relative z-50">
-      <div className="container mx-auto px-4 py-3 max-w-6xl flex items-center justify-between lg:justify-start">
-        {/* Mobile Menu Button */}
-        <button
-          className="lg:hidden block p-2 text-gray-700 hover:text-black"
-          onClick={() => setIsSidebarOpen(true)}
-        >
-          <Menu size={28} />
-        </button>
-
-        {/* Logo */}
-        <a href="/" className="font-bold text-xl text-[#1A1A1A] lg:mr-auto lg:flex-none lg:text-left flex-1 text-center">
-          Tracify
-        </a>
-
-        {/* Desktop Navigation */}
-        <div className="hidden lg:flex flex-1 justify-center space-x-4">
-          {isLoggedIn &&
-            ["features", "missing", "family", "contact"].map((item) => (
-              <Link key={item} href={`/${item}`}>
-                <a
-                  className={`px-3 py-2 rounded-md text-sm font-medium ${
-                    location === `/${item}`
-                      ? "bg-[#B4FF4A] text-[#1A1A1A]"
-                      : "text-gray-700 hover:bg-gray-100"
-                  }`}
-                >
-                  {item.charAt(0).toUpperCase() + item.slice(1)}
-                </a>
-              </Link>
-            ))}
-        </div>
-
-        {/* Bell Icon & Profile */}
-        <div className="flex items-center">
-          {isLoggedIn && (
-            <button className="p-2 text-gray-700 hover:text-[#B4FF4A]">
-              <Bell size={24} />
-            </button>
-          )}
-
-          {isLoggedIn ? (
-            <div className="relative flex items-center ml-4">
+    <nav className="bg-white">
+      <div className="container mx-auto px-4 py-3 max-w-6xl">
+        <div className="flex justify-between items-center">
+          <div className="flex items-center">
+            <a href="/" className="font-bold text-xl text-[#1A1A1A]">Tracify</a>
+          </div>
+          <div className="space-x-4 flex">
+            <Link href="/features">
+              <a className={`px-3 py-2 rounded-md text-sm font-medium ${
+                location === "/" 
+                  ? "bg-[#B4FF4A] text-[#1A1A1A]" 
+                  : "text-gray-700 hover:bg-gray-100"
+              }`}>
+                Features
+              </a>
+            </Link>
+            <Link href="/missing">
+              <a className={`px-3 py-2 rounded-md text-sm font-medium ${
+                location === "/missing" 
+                  ? "bg-[#B4FF4A] text-[#1A1A1A]" 
+                  : "text-gray-700 hover:bg-gray-100"
+              }`}>
+                Missing
+              </a>
+            </Link>
+            <Link href="/myfam">
+              <a className={`px-3 py-2 rounded-md text-sm font-medium ${
+                location === "/family" 
+                  ? "bg-[#B4FF4A] text-[#1A1A1A]" 
+                  : "text-gray-700 hover:bg-gray-100"
+              }`}>
+                Family
+              </a>
+            </Link>
+            <Link href="/contact">
+              <a className={`px-3 py-2 rounded-md text-sm font-medium ${
+                location === "/contact" 
+                  ? "bg-[#B4FF4A] text-[#1A1A1A]" 
+                  : "text-gray-700 hover:bg-gray-100"
+              }`}>
+                Contact
+              </a>
+            </Link>
+            <Link href="/report">
+              <a className={`px-3 py-2 rounded-md text-sm font-medium ${
+                location === "/contact" 
+                  ? "bg-[#B4FF4A] text-[#1A1A1A]" 
+                  : "text-gray-700 hover:bg-gray-100"
+              }`}>
+                Report
+              </a>
+            </Link>
+          </div>
+          <div className='absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0'>
               <button
                 type="button"
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -88,11 +99,11 @@ export default function Navbar() {
                 </div>
               )}
             </div>
-          ) : (
+           : (
             <a className="text-blue-400 text-sm px-4 py-2" href="/signin">
               SignUp / SignIn
             </a>
-          )}
+          )
         </div>
       </div>
 

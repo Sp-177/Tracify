@@ -23,6 +23,7 @@ const ProfilePage = () => {
   // Handle Photo Change
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
+    console.log(selectedFile);
     if (selectedFile) {
       setFile(selectedFile);
       const imageUrl = URL.createObjectURL(selectedFile);
@@ -41,7 +42,7 @@ const ProfilePage = () => {
     setUploading(true);
     try {
       const response = await axios.patch(
-        `${Backendurl}/api/v1/users/update-account`,
+        ${Backendurl}/api/v1/users/update-account,
         formDataToSend,
         {
           headers: { "Content-Type": "multipart/form-data" },
