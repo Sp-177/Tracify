@@ -31,7 +31,7 @@ export default function Navbar() {
                 Missing
               </a>
             </Link>
-            <Link href="/family">
+            <Link href="/myfam">
               <a className={`px-3 py-2 rounded-md text-sm font-medium ${
                 location === "/family" 
                   ? "bg-[#B4FF4A] text-[#1A1A1A]" 
@@ -47,6 +47,15 @@ export default function Navbar() {
                   : "text-gray-700 hover:bg-gray-100"
               }`}>
                 Contact
+              </a>
+            </Link>
+            <Link href="/report">
+              <a className={`px-3 py-2 rounded-md text-sm font-medium ${
+                location === "/contact" 
+                  ? "bg-[#B4FF4A] text-[#1A1A1A]" 
+                  : "text-gray-700 hover:bg-gray-100"
+              }`}>
+                Report
               </a>
             </Link>
           </div>

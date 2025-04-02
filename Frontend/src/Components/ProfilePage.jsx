@@ -54,19 +54,13 @@ const ProfilePage = () => {
     alert('Photo upload functionality would be implemented here');
   };
 
-  const handleGoBack = () => {
-    // In a real app, this would navigate back
-    console.log('Go back clicked');
-    alert('Back navigation would happen here');
-  };
-
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
   };
 
-  const handleUserTypeChange = (e) => {
-    setFormData({...formData, userType: e.target.value});
-  };
+  // const handleUserTypeChange = (e) => {
+  //   setFormData({...formData, userType: e.target.value});
+  // };
 
   // Determine which achievements to show
   const achievements = profileData?.achievements || defaultAchievements;
@@ -117,7 +111,7 @@ const ProfilePage = () => {
                           />
                         </div>
                         <div>
-                          <div className="text-xs text-gray-500 mb-2">JPG, GIF or PNG. Maximum file size 1 мб.</div>
+                          <div className="text-xs text-gray-500 mb-2">JPG, GIF or PNG. Maximum file size 1 MB.</div>
                           <button 
                             onClick={handleChangePhoto}
                             className="px-4 py-2 bg-gray-100 text-gray-700 rounded-md text-sm hover:bg-gray-200 transition-colors"
@@ -241,23 +235,9 @@ const ProfilePage = () => {
                   </div>
 
                   {/* Achievements Section */}
-                  <div className="w-full md:w-5/12">
-                    {/* Profile Type Dropdown */}
-                    <div className="mb-6">
-                      <div className="w-full p-4 bg-white border border-gray-200 rounded-lg">
-                        <select 
-                          value={formData.userType} 
-                          onChange={handleUserTypeChange}
-                          className="w-full p-2 border-gray-200 rounded bg-transparent"
-                        >
-                          <option value="student">Gaurdian</option>
-                          <option value="mentor">Member</option>
-                        </select>
-                      </div>
-                    </div>
-
+                  <div className="w-full md:w-5/12 flex justify-center items-center">
                     {/* Achievements Section */}
-                    <div className="bg-white border border-gray-200 rounded-lg p-5">
+                    <div className="bg-white border h-[400px] border-gray-200 rounded-lg p-5">
                       <h2 className="text-lg font-semibold mb-4">Achievements</h2>
                       
                       {displayedAchievements.map(achievement => (
