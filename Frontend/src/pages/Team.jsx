@@ -1,41 +1,56 @@
 import TeamMember from "../Components/TeamMember";
 
 // Placeholder image URLs - replace with actual images
-const johnImageUrl = "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=256&q=80";
-const janeImageUrl = "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=256&q=80";
-const michaelImageUrl = "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=256&q=80";
-const emilyImageUrl = "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=256&q=80";
-
+import uj from "../assets/images/uj.jpg";
+import sh from "../assets/images/sh.jpg";
+import su from "../assets/images/su.jpg";
+import st from "../assets/images/st.jpg";
 const Team = () => {
   // Team member data
   const teamMembers = [
     {
       id: 1,
-      name: "John Smith",
+      name: "Shubham Patel",
       title: "CEO and Founder",
       experience: "10+ years of experience in digital marketing. Expertise in SEO, PPC, and content strategy",
-      photo: johnImageUrl
+      photo: sh,
+      link :{
+        linkedin: "https://www.linkedin.com/in/shub17/",
+        github: "https://github.com/Sp-177"
+      }
     },
     {
       id: 2,
-      name: "Jane Doe",
+      name: "Ujjwal Agrawal",
       title: "Director of Operations",
       experience: "7+ years of experience in project management and team leadership. Strong organizational and communication skills",
-      photo: janeImageUrl
+      photo: uj,
+      link :{
+       linkedin: "https://www.linkedin.com/in/ujjwal-agrawal-9267b1253/",
+        github: "https://github.com/ujjwalagrawal-1"
+      }
     },
     {
       id: 3,
-      name: "Michael Brown",
+      name: "Sudhanshu raj",
       title: "Senior SEO Specialist",
       experience: "5+ years of experience in SEO and content creation. Proficient in keyword research and on-page optimization",
-      photo: michaelImageUrl
+      photo: su,
+      link :{
+         linkedin: "https://www.linkedin.com/in/sudhanshu-raj2306/",
+        github: "https://github.com/Sudhanshu2306"
+      }
     },
     {
       id: 4,
-      name: "Emily Johnson",
+      name: "Siddhant Tomar",
       title: "PPC Manager",
       experience: "3+ years of experience in paid search advertising. Skilled in campaign management and optimization",
-      photo: emilyImageUrl
+      photo: st,
+      link :{
+        linkedin: "https://www.linkedin.com/in/siddhant-tomar-9b3aab261/",
+        github: "https://github.com/siddhanttomar2003"
+      }
     }
   ];
 
@@ -61,6 +76,7 @@ const Team = () => {
             title={member.title}
             experience={member.experience}
             photo={member.photo}
+            link={member.link}
           />
         ))}
       </div>

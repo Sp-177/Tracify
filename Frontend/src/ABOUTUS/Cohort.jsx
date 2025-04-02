@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaLinkedin, FaGithub } from "react-icons/fa";
-import uj from "../ABOUTUS/images/uj.jpg";
-import sh from "../ABOUTUS/images/sh.jpg";
-import su from "../ABOUTUS/images/su.jpg";
-import st from "../ABOUTUS/images/st.jpg";
+import uj from "../assets/images/uj.jpg";
+import sh from "../assets/images/sh.jpg";
+import su from "../assets/images/su.jpg";
+import st from "../assets/images/st.jpg";
 
 const teamMembers = [
     {

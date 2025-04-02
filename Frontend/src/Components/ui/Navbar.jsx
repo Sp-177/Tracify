@@ -150,9 +150,11 @@ export default function Navbar() {
               </div>
             </div>
           ) : (
-            <a className="block px-4 py-2 text-sm text-blue-400" href="/signin">
-              SignUp / SignIn
-            </a>
+              <div className="flex gap-4 p-2 bg-lime-300 rounded-full shadow-md">
+                <a className="px-4 py-2 text-sm text-white font-semibold bg-green-700 rounded-full hover:bg-green-600 transition" href="/signup">SignUp</a>
+                <a className="px-4 py-2 text-sm text-green-800 font-semibold border-2 border-green-700 rounded-full hover:bg-lime-400 transition" href="/signin">SignIn</a>
+              </div>
+
           )}
         </div>
       </div>
