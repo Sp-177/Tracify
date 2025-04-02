@@ -8,7 +8,8 @@ import Home from "./pages/Home";
 import ContactPage from "./pages/ContactPage";
 import Profile from "./pages/Profile";
 import MyFam from "./pages/MyFam";
-import LoadingScreen from "./Components/LoadingScreen.jsx"; // Import loading screen
+import LoadingScreen from "./Components/LoadingScreen.jsx";
+import FlashLight404 from "./pages/FlashLight404.jsx"; // Import loading screen
 
 // Private Route Component
 const PrivateRoute = ({ element }) => {
@@ -39,6 +40,7 @@ const App = () => {
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/myfam" element={<PrivateRoute element={<MyFam />} />} />
+        <Route path="*" element={<FlashLight404 />} />
       </Routes>
     </Router>
   );
