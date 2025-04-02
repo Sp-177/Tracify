@@ -8,6 +8,7 @@ import {
   refreshAccessToken,
   registerUser,
   updateAccountDetails,
+  uploadFile,
 } from "../controllers/User.controller.js";
 import { verifyJWT } from "../middlewares/authMiddlewares.js";
 import { upload } from "../middlewares/multer.middleware.js";
@@ -30,4 +31,11 @@ router.route("/update-account").patch(
   updateAccountDetails
 );
 router.route("/getfamily/:familyId").get(verifyJWT, fetchFamily);
+router.route("/upload").post(upload.fields([
+  {
+    name: "image",
+    maxCount: 1,
+  }
+]),uploadFile);
+
 export default router;

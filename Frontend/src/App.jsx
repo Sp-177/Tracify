@@ -18,6 +18,8 @@ const PrivateRoute = ({ element }) => {
   return user && isLoggedIn ? element : <Navigate to="/signin" />;
 };
 
+import Report from "./pages/Report";
+import ResolvedPage from "./pages/ResolvedPage";
 const App = () => {
   const { user, loading } = useAuth();
   const [isPageLoading, setIsPageLoading] = useState(true);
@@ -41,6 +43,9 @@ const App = () => {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/report" element={<Report />} />
+        <Route path="/resolved" element={<ResolvedPage />} />
+        {/* Protected Routes - Only accessible if user is logged in */}
         <Route path="/myfam" element={<PrivateRoute element={<MyFam />} />} />
         <Route path="*" element={<FlashLight404 />} />
       </Routes>
