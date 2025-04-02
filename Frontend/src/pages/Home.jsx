@@ -5,15 +5,15 @@ import TestimonialPage from '../Components/TestimonialPage'
 import WorkingProcess from '../Components/WorkingProcess'
 import Team from './Team'
 import Footer from '../Components/ui/Footer'
-import Banner from '../Components/Banner'
 import ProgressLine from '../Components/Progress/ProgressLine'
 import Bot from '../Components/Bot'
+import Banner from "../Components/Banner.jsx";
 
 function Home() {
   return (
     <div>
         <Navbar />
-        <Banner />
+        <Banner/>
         <ServicePage />
         <WorkingProcess />
         <ProgressLine />

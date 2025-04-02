@@ -1,5 +1,5 @@
 import { FaLinkedin, FaGithub} from "react-icons/fa";
-const TeamMember = ({ name, title, experience, photo }) => {
+const TeamMember = ({ name, title, experience, photo,link }) => {
   return (
     <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm relative overflow-hidden">
       <div className="flex justify-between mb-4">
@@ -26,10 +26,10 @@ const TeamMember = ({ name, title, experience, photo }) => {
           </div>
         </div>
         <div className="flex gap-4">
-            <a href="#" className="w-8 h-8 bg-black rounded-full flex items-center justify-center text-white">
+            <a href={link.linkedin} target="_blank" className="w-8 h-8 bg-black rounded-full flex items-center justify-center text-white">
             <FaLinkedin />
             </a>
-            <a href="#" className="w-8 h-8 bg-black rounded-full flex items-center justify-center text-white">
+            <a href={link.github} target="_blank" className="w-8 h-8 bg-black rounded-full flex items-center justify-center text-white">
             <FaGithub  />
             </a>
         </div>
