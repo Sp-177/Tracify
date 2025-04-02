@@ -143,7 +143,7 @@ const fetchFamily = asyncHandler(async (req, res) => {
     // console.log(familyId);
     // Fetch all family members (excluding the family head)
     const familyMembers = await User.find({ familyId : familyId }).select("-password -refreshToken");
-    console.log(familyMembers);
+    // console.log(familyMembers);
     if (!familyMembers.length) {
         return res.status(404).json(new errorhandler(404, "No family members found"));
     }
@@ -182,7 +182,6 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
 
         // Upload the image to Cloudinary and get only the URL
         const avatarUrl = await uploadOnCloudinary(User_Image_local_path);
-        console.log("dekh ya hai ",avatarUrl);
         updateFields.avatar = avatarUrl.url;
     }
     if (Object.keys(updateFields).length === 0) {
@@ -194,7 +193,7 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
         req.user._id,
         { $set: updateFields },
         { new: true }
-    ).select("-password");
+    ).select("-password -refreshToken");
 
     return res.status(200).json(new ApiResponse(200, user, "Account details updated successfully"));
 });
