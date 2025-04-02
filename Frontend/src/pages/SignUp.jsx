@@ -19,6 +19,7 @@ function SignUp() {
     headEmail: '',
     avatar: '',
     termsAccepted: false,
+    aadharCardNo:''
   });
 
   const [errors, setErrors] = useState({});
@@ -95,6 +96,12 @@ function SignUp() {
             <div className="mb-4">
               <label className="block text-gray-700 mb-1">Password</label>
               <input type="password" name="password" className="w-full p-2 border rounded-lg" placeholder="Enter your password" value={formData.password} onChange={handleChange} />
+              {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-gray-700 mb-1">Password</label>
+              <input type="number" name="aadharnumber" className="w-full p-2 border rounded-lg" placeholder="Enter your aadhar" value={formData.password} onChange={handleChange} />
               {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
             </div>
             
