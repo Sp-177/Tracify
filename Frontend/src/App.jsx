@@ -10,7 +10,6 @@ import Profile from "./pages/Profile";
 import MyFam from "./pages/MyFam";
 import LoadingScreen from "./Components/LoadingScreen.jsx"; // Import loading screen
 import Lost from "./pages/Lost.jsx";
-import LoadingScreen from "./Components/LoadingScreen.jsx";
 import FlashLight404 from "./pages/FlashLight404.jsx"; // Import loading screen
 
 // Private Route Component

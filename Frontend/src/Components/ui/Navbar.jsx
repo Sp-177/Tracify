@@ -89,9 +89,21 @@ export default function Navbar() {
               )}
             </div>
           ) : (
-            <a className="text-blue-400 text-sm px-4 py-2" href="/signin">
-              SignUp / SignIn
-            </a>
+            <div className="flex space-x-4">
+  <a
+    className="text-black text-base font-semibold px-4 py-2 border border-lime-400 rounded-lg transition-all duration-500 ease-in-out hover:bg-lime-400 hover:text-black shadow-[0_0_10px_#bef264] hover:shadow-[0_0_25px_#bef264] transform hover:scale-105"
+    href="/signup"
+  >
+    Sign Up
+  </a>
+  <a
+    className="text-black text-base font-semibold px-4 py-2 border border-lime-400 rounded-lg transition-all duration-500 ease-in-out hover:bg-lime-400 hover:text-black shadow-[0_0_10px_#bef264] hover:shadow-[0_0_25px_#bef264] transform hover:scale-105"
+    href="/signin"
+  >
+    Sign In
+  </a>
+</div>
+
           )}
         </div>
       </div>
