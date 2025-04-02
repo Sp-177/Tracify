@@ -33,12 +33,35 @@ function SignUp() {
     });
   };
 
-  const handleImageUpload = (e) => {
+  const handleImageUpload = async (e) => {
     const file = e.target.files[0];
+  
     if (file) {
-      setFormData({ ...formData, avatar: URL.createObjectURL(file) });
+      setFormData((prev) => ({ ...prev, avatar: URL.createObjectURL(file) }));
+  
+      const formDatatoSend = new FormData();
+      formDatatoSend.append("file", file);
+  
+      try {
+        const response = await axios.post("http://127.0.0.1:5000/upload", formDatatoSend, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+       
+        if (response.data.success) {
+          setFormData((prev) => ({ ...prev, aadharCardNo: response.data.aadhar_number }));
+          
+        } else {
+          console.log("Error: 404" );
+          
+        }
+      } catch (e) {
+        console.log("Error: 500" );
+        console.error('Error uploading file:', e);
+        
+      }
     }
   };
+  
 
   const validateForm = () => {
     let newErrors = {};
@@ -119,7 +142,7 @@ function SignUp() {
                   onChange={handleChange}
                 />
                 <label className="absolute inset-y-0 right-3 flex items-center cursor-pointer">
-                  <input type="file" className="hidden" onChange={handleImageUpload} />
+                  <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
                   <Upload size={20} className="text-gray-500 hover:text-gray-700" />
                 </label>
               </div>
